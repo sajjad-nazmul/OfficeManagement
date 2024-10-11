@@ -1,0 +1,31 @@
+﻿@rendermode InteractiveServer
+
+@inject NavigationManager Navigation
+
+<div>
+    <form>
+        <select value="@selectedCulture" @onchange="ChangeCulture">
+            <option value="en-US">English</option>
+            <option value="de-DE">German</option>
+        </select>
+    </form>
+</div>
+
+@code
+{
+    private string selectedCulture = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+
+    private void ChangeCulture(ChangeEventArgs e)
+    {
+        selectedCulture = e.Value.ToString();
+        if (!string.IsNullOrWhiteSpace(selectedCulture))
+        {
+            var uri = new Uri(Navigation.Uri).GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped);
+            var cultureEscaped = Uri.EscapeDataString(selectedCulture);
+            var uriEscaped = Uri.EscapeDataString(uri);
+
+            // Update the culture and reload the page to reflect changes
+            Navigation.NavigateTo($"Culture/SetCulture?culture={cultureEscaped}&redirectUri={uriEscaped}", forceLoad: true);
+        }
+    }
+}

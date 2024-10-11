@@ -1,0 +1,80 @@
+﻿@page "/EmployeeList"
+
+@using OfficeManagement.Data
+@using Microsoft.AspNetCore.Identity
+
+
+@using Microsoft.AspNetCore.Authorization
+
+@inject UserManager<ApplicationUser> userManager
+@inject RoleManager<IdentityRole> roleManager
+
+@attribute [Authorize(Roles = "Admin")]
+
+<PageTitle>Employee List</PageTitle>
+
+<h1>You are authorized to Employee List</h1>
+
+<AuthorizeView>
+    Hello @context.User.Identity?.Name!
+</AuthorizeView>
+
+
+<h3>All Users</h3>
+
+@if (users == null || userRoles == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (users.Count == 0 || userRoles.Count == 0)
+{
+    <p>No users found.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Roles</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in users)
+            {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                    <td>@string.Join(", ", userRoles[user.Id])</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<ApplicationUser> users = new();
+
+    // protected override void OnInitialized()
+    // {
+    //     // Fetch all users
+    //     users = userManager.Users.ToList();
+    // }
+
+    private Dictionary<string, List<string>> userRoles = new Dictionary<string, List<string>>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Fetch all users
+        users = userManager.Users.ToList();
+
+        // Fetch roles for each user and store them in the dictionary
+        foreach (var user in users)
+        {
+            var roles = await userManager.GetRolesAsync(user);
+            userRoles[user.Id] = roles.ToList();
+        }
+    }
+}

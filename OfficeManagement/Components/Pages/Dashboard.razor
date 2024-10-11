@@ -1,0 +1,16 @@
+﻿@page "/Dashboard"
+
+@using Microsoft.AspNetCore.Authorization
+
+@inject IStringLocalizer<App> localizer
+
+
+@attribute [Authorize(Roles = "User")]
+
+<PageTitle>@localizer["Dashboard"]</PageTitle>
+
+<h1>@localizer["You are authenticated"]</h1>
+
+<AuthorizeView>
+    @localizer["Hello"] @context.User.Identity?.Name!
+</AuthorizeView>

@@ -1,0 +1,63 @@
+﻿@page "/employees/create"
+@using Microsoft.EntityFrameworkCore
+@using OfficeManagement.Data
+@inject ApplicationDbContext context
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>Employee</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="Employee" OnValidSubmit="AddEmployee" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+            <div class="mb-3">
+                <label for="firstname" class="form-label">FirstName:</label> 
+                <InputText id="firstname" @bind-Value="Employee.FirstName" class="form-control" /> 
+                <ValidationMessage For="() => Employee.FirstName" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="lastname" class="form-label">LastName:</label> 
+                <InputText id="lastname" @bind-Value="Employee.LastName" class="form-control" /> 
+                <ValidationMessage For="() => Employee.LastName" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="department" class="form-label">Department:</label> 
+                <InputText id="department" @bind-Value="Employee.Department" class="form-control" /> 
+                <ValidationMessage For="() => Employee.Department" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="hiredate" class="form-label">HireDate:</label> 
+                <InputDate id="hiredate" @bind-Value="Employee.HireDate" class="form-control" /> 
+                <ValidationMessage For="() => Employee.HireDate" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="applicationuserid" class="form-label">ApplicationUserId:</label> 
+                <InputText id="applicationuserid" @bind-Value="Employee.ApplicationUserId" class="form-control" /> 
+                <ValidationMessage For="() => Employee.ApplicationUserId" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/employees">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private Employee Employee { get; set; } = new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddEmployee()
+    {
+        context.Employees.Add(Employee);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/employees");
+    }
+}

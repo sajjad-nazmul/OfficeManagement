@@ -1,0 +1,67 @@
+﻿@rendermode InteractiveServer
+
+@page "/employees"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using OfficeManagement.Data
+@inject ApplicationDbContext _context
+
+@attribute [Authorize(Roles = "Admin")]
+
+<PageTitle>Employees</PageTitle>
+
+<h1>Employees</h1>
+
+@* <p>
+    <a href="employees/create">Create New</a>
+</p> *@
+
+<div class="mb-3">
+    <input @bind="searchTerm" @oninput="OnSearchChanged" class="form-control" placeholder="Search by name..." />
+</div>
+
+
+<QuickGrid Class="table" Items="filteredEmployees.AsQueryable<Employee>()">
+    <PropertyColumn Property="employee => employee.Id" />
+    <PropertyColumn Property="employee => employee.FirstName" Sortable="true" />
+    <PropertyColumn Property="employee => employee.LastName" Sortable="true" />
+    <PropertyColumn Property="employee => employee.Department" />
+    <PropertyColumn Property="employee => employee.HireDate" Sortable="true" />
+    <PropertyColumn Property="employee => employee.ApplicationUserId" />
+
+    <TemplateColumn Context="employee">
+        <a href="@($"employees/edit?id={employee.Id}")">Edit</a> |
+        @* <a href="@($"employees/details?id={employee.Id}")">Details</a> | *@
+        <a href="@($"employees/delete?id={employee.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    private List<Employee> _employees;
+    private List<Employee> filteredEmployees;
+    private string searchTerm = "";
+
+    protected override void OnInitialized()
+    {
+        _employees = _context.Employees.ToList();
+        filteredEmployees = _employees;
+    }
+
+    private void OnSearchChanged(ChangeEventArgs e)
+    {
+        searchTerm = e.Value.ToString();
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            filteredEmployees = _employees;
+        }
+        else
+        {
+            filteredEmployees = _employees.Where(e =>
+                e.FirstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                e.LastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+    }
+
+}
