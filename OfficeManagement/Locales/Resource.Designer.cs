@@ -61,11 +61,92 @@ namespace OfficeManagement.Locales {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this?.
+        /// </summary>
+        public static string Are_you_sure_you_want_to_delete_this_ {
+            get {
+                return ResourceManager.GetString("Are you sure you want to delete this?", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back to List.
+        /// </summary>
+        public static string Back_to_List {
+            get {
+                return ResourceManager.GetString("Back to List", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm Password.
+        /// </summary>
+        public static string Confirm_Password {
+            get {
+                return ResourceManager.GetString("Confirm Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a new account..
+        /// </summary>
+        public static string Create_a_new_account_ {
+            get {
+                return ResourceManager.GetString("Create a new account.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dashboard.
         /// </summary>
         public static string Dashboard {
             get {
                 return ResourceManager.GetString("Dashboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Department.
+        /// </summary>
+        public static string Department {
+            get {
+                return ResourceManager.GetString("Department", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string Edit {
+            get {
+                return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email.
+        /// </summary>
+        public static string Email {
+            get {
+                return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Employee.
+        /// </summary>
+        public static string Employee {
+            get {
+                return ResourceManager.GetString("Employee", resourceCulture);
             }
         }
         
@@ -88,11 +169,47 @@ namespace OfficeManagement.Locales {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to First Name.
+        /// </summary>
+        public static string First_Name {
+            get {
+                return ResourceManager.GetString("First Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forgot your password?.
+        /// </summary>
+        public static string Forgot_your_password_ {
+            get {
+                return ResourceManager.GetString("Forgot your password?", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hello.
         /// </summary>
         public static string Hello {
             get {
                 return ResourceManager.GetString("Hello", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hire Date.
+        /// </summary>
+        public static string Hire_Date {
+            get {
+                return ResourceManager.GetString("Hire Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last Name.
+        /// </summary>
+        public static string Last_Name {
+            get {
+                return ResourceManager.GetString("Last Name", resourceCulture);
             }
         }
         
@@ -124,7 +241,7 @@ namespace OfficeManagement.Locales {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password (default).
+        ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string Password {
             get {
@@ -142,6 +259,42 @@ namespace OfficeManagement.Locales {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Register as a new user.
+        /// </summary>
+        public static string Register_as_a_new_user {
+            get {
+                return ResourceManager.GetString("Register as a new user", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remember me.
+        /// </summary>
+        public static string Remember_me {
+            get {
+                return ResourceManager.GetString("Remember me", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resend email confirmation.
+        /// </summary>
+        public static string Resend_email_confirmation {
+            get {
+                return ResourceManager.GetString("Resend email confirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         public static string Search_by_name___ {
@@ -151,11 +304,40 @@ namespace OfficeManagement.Locales {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no external authentication services configured. See this article about setting up this ASP.NET application to support logging in via external services..
+        /// </summary>
+        public static string There_are_no_external_authentication_services_configured__See_this_article_about_setting_up_this_ASP_NET_application_to_support_logging_in_via_external_services_ {
+            get {
+                return ResourceManager.GetString("There are no external authentication services configured. See this article about " +
+                        "setting up this ASP.NET application to support logging in via external services." +
+                        "", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use a local account to log in..
+        /// </summary>
+        public static string Use_a_local_account_to_log_in_ {
+            get {
+                return ResourceManager.GetString("Use a local account to log in.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use another service to log in..
         /// </summary>
         public static string Use_another_service_to_log_in_ {
             get {
                 return ResourceManager.GetString("Use another service to log in.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use another service to register..
+        /// </summary>
+        public static string Use_another_service_to_register_ {
+            get {
+                return ResourceManager.GetString("Use another service to register.", resourceCulture);
             }
         }
         

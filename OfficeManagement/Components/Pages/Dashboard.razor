@@ -1,9 +1,10 @@
 ﻿@page "/Dashboard"
 
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using OfficeManagement.Locales;
 
-@inject IStringLocalizer<App> localizer
-
+@inject IStringLocalizer<Resource> localizer
 
 @attribute [Authorize]
 

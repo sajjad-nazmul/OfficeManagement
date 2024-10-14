@@ -11,8 +11,6 @@
 @using Microsoft.Extensions.Localization
 @using OfficeManagement.Locales;
 
-@using System.Security.Claims
-@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IStringLocalizer<Resource> localizer
 @inject IEmployeeService employeeService
 
@@ -35,34 +33,18 @@
 @if (filteredEmployees != null)
 {
     <QuickGrid Class="table" Items="filteredEmployees.AsQueryable<Employee>()">
-        <PropertyColumn Property="employee => employee.Id" />
-        <PropertyColumn Property="employee => employee.FirstName" Sortable="true" />
-        <PropertyColumn Property="employee => employee.LastName" Sortable="true" />
-        <PropertyColumn Property="employee => employee.Department" />
-        <PropertyColumn Property="employee => employee.HireDate" Sortable="true" />
+        <PropertyColumn Property="employee => employee.Id" Title="@localizer["Id"]" />
+        <PropertyColumn Property="employee => employee.FirstName" Title="@localizer["First Name"]" Sortable="true" />
+        <PropertyColumn Property="employee => employee.LastName" Title="@localizer["Last Name"]" Sortable="true" />
+        <PropertyColumn Property="employee => employee.Department" Title="@localizer["Department"]" />
+        <PropertyColumn Property="employee => employee.HireDate" Title="@localizer["Hire Date"]" Sortable="true" />
 
         <TemplateColumn Context="employee">
-            <a href="@($"employees/edit?id={employee.Id}")">Edit</a> |
+            <a href="@($"employees/edit?id={employee.Id}")">@localizer["Edit"]</a> |
             @* <a href="@($"employees/details?id={employee.Id}")">Details</a> | *@
-            <a href="@($"employees/delete?id={employee.Id}")">Delete</a>
+            <a href="@($"employees/delete?id={employee.Id}")">@localizer["Delete"]</a>
         </TemplateColumn>
     </QuickGrid>
-}
-
-<h3>User Claims</h3>
-
-@if (user != null)
-{
-    <ul>
-        @foreach (var claim in user.Claims)
-        {
-            <li>@claim.Type: @claim.Value (@claim.Issuer)</li>
-        }
-    </ul>
-}
-else
-{
-    <p>Loading claims...</p>
 }
 
 @code {
@@ -70,17 +52,10 @@ else
     private List<Employee>? filteredEmployees;
     private string searchTerm = "";
 
-    private ClaimsPrincipal user;
-
     protected override async Task OnInitializedAsync()
     {
         _employees = await employeeService.GetEmployees();
         filteredEmployees = _employees;
-
-
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        user = authState.User;
-
     }
 
     private void OnSearchChanged(ChangeEventArgs e)

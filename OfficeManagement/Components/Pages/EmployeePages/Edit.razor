@@ -5,17 +5,21 @@
 @using OfficeManagement.Services
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using OfficeManagement.Locales;
+
+@inject IStringLocalizer<Resource> localizer
 @inject IEmployeeService employeeService
 @inject NavigationManager NavigationManager
 
 
 @attribute [Authorize(Roles = "Admin")]
 
-<PageTitle>Edit</PageTitle>
+<PageTitle>@localizer["Edit"]</PageTitle>
 
-<h1>Edit</h1>
+<h1>@localizer["Edit"]</h1>
 
-<h2>Employee</h2>
+<h2>@localizer["Employee"]</h2>
 <hr />
 @if (Employee is null)
 {
@@ -30,35 +34,35 @@ else
                 <ValidationSummary />
                 <input type="hidden" name="Employee.Id" value="@Employee.Id" />
                 <div class="mb-3">
-                    <label for="firstname" class="form-label">FirstName:</label>
+                    <label for="firstname" class="form-label">@localizer["First Name"]:</label>
                     <InputText id="firstname" @bind-Value="Employee.FirstName" class="form-control" />
                     <ValidationMessage For="() => Employee.FirstName" class="text-danger" />
                 </div>
                 <div class="mb-3">
-                    <label for="lastname" class="form-label">LastName:</label>
+                    <label for="lastname" class="form-label">@localizer["Last Name"]:</label>
                     <InputText id="lastname" @bind-Value="Employee.LastName" class="form-control" />
                     <ValidationMessage For="() => Employee.LastName" class="text-danger" />
                 </div>
                 <div class="mb-3">
-                    <label for="department" class="form-label">Department:</label>
+                    <label for="department" class="form-label">@localizer["Department"]:</label>
                     <InputText id="department" @bind-Value="Employee.Department" class="form-control" />
                     <ValidationMessage For="() => Employee.Department" class="text-danger" />
                 </div>
                 <div class="mb-3">
-                    <label for="hiredate" class="form-label">HireDate:</label>
+                    <label for="hiredate" class="form-label">@localizer["Hire Date"]:</label>
                     <InputDate id="hiredate" @bind-Value="Employee.HireDate" class="form-control" />
                     <ValidationMessage For="() => Employee.HireDate" class="text-danger" />
                 </div>
 
-                <InputText id="applicationUserId" @bind-Value="Employee.ApplicationUserId" class="form-control" />
-                <button type="submit" class="btn btn-primary">Save</button>
+                <InputText id="applicationUserId" @bind-Value="Employee.ApplicationUserId" class="form-control" hidden/>
+                <button type="submit" class="btn btn-primary">@localizer["Save"]</button>
             </EditForm>
         </div>
     </div>
 }
 
 <div>
-    <a href="/employees">Back to List</a>
+    <a href="/employees">@localizer["Back to List"]</a>
 </div>
 
 @code {
