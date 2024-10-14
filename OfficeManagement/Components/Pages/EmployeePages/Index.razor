@@ -11,10 +11,14 @@
 @using Microsoft.Extensions.Localization
 @using OfficeManagement.Locales;
 
+@using System.Security.Claims
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IStringLocalizer<Resource> localizer
 @inject IEmployeeService employeeService
 
-@attribute [Authorize(Roles = "Admin")]
+@inject UserManager<ApplicationUser> UserManager
+
+@attribute [Authorize(Roles = "Admin, Moderator")]
 
 <PageTitle>@localizer["Employees"]</PageTitle>
 
@@ -45,15 +49,38 @@
     </QuickGrid>
 }
 
+<h3>User Claims</h3>
+
+@if (user != null)
+{
+    <ul>
+        @foreach (var claim in user.Claims)
+        {
+            <li>@claim.Type: @claim.Value (@claim.Issuer)</li>
+        }
+    </ul>
+}
+else
+{
+    <p>Loading claims...</p>
+}
+
 @code {
     private List<Employee>? _employees;
     private List<Employee>? filteredEmployees;
     private string searchTerm = "";
 
+    private ClaimsPrincipal user;
+
     protected override async Task OnInitializedAsync()
     {
         _employees = await employeeService.GetEmployees();
         filteredEmployees = _employees;
+
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        user = authState.User;
+
     }
 
     private void OnSearchChanged(ChangeEventArgs e)
@@ -70,5 +97,6 @@
                 e.LastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
         }
     }
+
 
 }

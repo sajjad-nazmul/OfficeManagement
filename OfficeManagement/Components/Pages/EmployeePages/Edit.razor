@@ -3,8 +3,13 @@
 
 @using OfficeManagement.Data
 @using OfficeManagement.Services
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Authorization
 @inject IEmployeeService employeeService
 @inject NavigationManager NavigationManager
+
+
+@attribute [Authorize(Roles = "Admin")]
 
 <PageTitle>Edit</PageTitle>
 
