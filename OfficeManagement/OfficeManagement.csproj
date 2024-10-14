@@ -31,17 +31,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Locales\Resource.en-US.Designer.cs">
+    <Compile Update="Locales\Resource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Resource.en-US.resx</DependentUpon>
+      <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Locales\Resource.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Locales\Resource.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource.en-US.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

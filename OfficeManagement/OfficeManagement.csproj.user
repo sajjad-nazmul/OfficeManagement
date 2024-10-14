@@ -8,4 +8,12 @@
     <_SelectedScaffolderCategoryPath>root/Common/RazorComponent</_SelectedScaffolderCategoryPath>
     <WebStackScaffolding_ControllerDialogWidth>650.4</WebStackScaffolding_ControllerDialogWidth>
   </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Locales\Resource.de-CH.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Locales\Resource.en-US.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

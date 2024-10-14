@@ -118,36 +118,39 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Dashboard" xml:space="preserve">
-    <value>Armaturenbrett</value>
+    <value>Dashboard</value>
   </data>
   <data name="Employee List" xml:space="preserve">
-    <value>Mitarbeiterliste</value>
+    <value>Employee List</value>
   </data>
   <data name="Employees" xml:space="preserve">
-    <value>Employees (german)</value>
+    <value>Employees</value>
   </data>
   <data name="Hello" xml:space="preserve">
-    <value>Hallo</value>
+    <value>Hello</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Login</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Abmelden</value>
+    <value>Logout</value>
   </data>
   <data name="Office Management" xml:space="preserve">
-    <value>Büromanagement</value>
+    <value>Office Management</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password (German)</value>
+    <value>Password (default)</value>
   </data>
   <data name="Register" xml:space="preserve">
-    <value>Registrieren</value>
+    <value>Register</value>
   </data>
   <data name="Search by name..." xml:space="preserve">
-    <value>Search by name... (german)</value>
+    <value />
+  </data>
+  <data name="Use another service to log in." xml:space="preserve">
+    <value>Use another service to log in.</value>
   </data>
   <data name="You are authenticated" xml:space="preserve">
-    <value>Sie sind authentifiziert</value>
+    <value>You are authenticated</value>
   </data>
 </root>

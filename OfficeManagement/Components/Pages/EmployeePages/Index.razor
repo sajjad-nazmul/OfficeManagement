@@ -7,20 +7,25 @@
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using OfficeManagement.Data
 @using OfficeManagement.Services
+
+@using Microsoft.Extensions.Localization
+@using OfficeManagement.Locales;
+
+@inject IStringLocalizer<Resource> localizer
 @inject IEmployeeService employeeService
 
 @attribute [Authorize(Roles = "Admin")]
 
-<PageTitle>Employees</PageTitle>
+<PageTitle>@localizer["Employees"]</PageTitle>
 
-<h1>Employees</h1>
+<h1>@localizer["Employees"]</h1>
 
 @* <p>
     <a href="employees/create">Create New</a>
 </p> *@
 
 <div class="mb-3">
-    <input @bind="searchTerm" @oninput="OnSearchChanged" class="form-control" placeholder="Search by name..." />
+    <input @bind="searchTerm" @oninput="OnSearchChanged" class="form-control" placeholder="@localizer["Search by name..."]" />
 </div>
 
 @if (filteredEmployees != null)
@@ -41,8 +46,8 @@
 }
 
 @code {
-    private List<Employee> _employees;
-    private List<Employee> filteredEmployees;
+    private List<Employee>? _employees;
+    private List<Employee>? filteredEmployees;
     private string searchTerm = "";
 
     protected override async Task OnInitializedAsync()
