@@ -123,6 +123,9 @@
   <data name="Employee List" xml:space="preserve">
     <value>Employee List</value>
   </data>
+  <data name="Employees" xml:space="preserve">
+    <value>Employees</value>
+  </data>
   <data name="Hello" xml:space="preserve">
     <value>Hello</value>
   </data>
@@ -140,6 +143,9 @@
   </data>
   <data name="Register" xml:space="preserve">
     <value>Register</value>
+  </data>
+  <data name="Search by name..." xml:space="preserve">
+    <value>Search by name...</value>
   </data>
   <data name="Use another service to log in." xml:space="preserve">
     <value>Use another service to log in.</value>
