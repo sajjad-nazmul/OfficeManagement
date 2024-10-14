@@ -1,4 +1,7 @@
-﻿@inject IStringLocalizer<App> localizer
+﻿@using Microsoft.Extensions.Localization
+@using OfficeManagement.Locales;
+
+@inject IStringLocalizer<Resource> localizer
 @inject NavigationManager NavigationManager
 
 @implements IDisposable

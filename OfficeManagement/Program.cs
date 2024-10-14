@@ -10,7 +10,7 @@ using OfficeManagement.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddLocalization(options => options.ResourcesPath = "Locales");
+builder.Services.AddLocalization();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -68,9 +68,9 @@ app.UseAntiforgery();
 
 
 
-string[] supportedCultures = ["en-US", "de-DE"];
+string[] supportedCultures = ["en-US", "de-CH"];
 var localizationOptions = new RequestLocalizationOptions()
-    //.SetDefaultCulture(supportedCultures[0])
+    .SetDefaultCulture(supportedCultures[0])
     .AddSupportedCultures(supportedCultures)
     .AddSupportedUICultures(supportedCultures);
 app.UseRequestLocalization(localizationOptions);
