@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using OfficeManagement.Components;
 using OfficeManagement.Components.Account;
 using OfficeManagement.Data;
+using OfficeManagement.Repositories;
+using OfficeManagement.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,19 +43,10 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
-var app = builder.Build();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
-app.Use(async (context, next) =>
-{
-    if (context.Request.Path == "/")
-    {
-        context.Response.Redirect("/Dashboard");
-    }
-    else
-    {
-        await next();
-    }
-});
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

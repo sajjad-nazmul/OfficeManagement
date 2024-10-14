@@ -2,7 +2,8 @@
 @using Microsoft.EntityFrameworkCore
 
 @using OfficeManagement.Data
-@inject ApplicationDbContext context
+@using OfficeManagement.Services
+@inject IEmployeeService employeeService
 @inject NavigationManager NavigationManager
 
 <PageTitle>Edit</PageTitle>
@@ -43,11 +44,8 @@ else
                     <InputDate id="hiredate" @bind-Value="Employee.HireDate" class="form-control" />
                     <ValidationMessage For="() => Employee.HireDate" class="text-danger" />
                 </div>
-                <div class="mb-3">
-                    <label for="applicationuserid" class="form-label">ApplicationUserId:</label>
-                    <InputText id="applicationuserid" @bind-Value="Employee.ApplicationUserId" class="form-control" />
-                    <ValidationMessage For="() => Employee.ApplicationUserId" class="text-danger" />
-                </div>
+
+                <InputText id="applicationUserId" @bind-Value="Employee.ApplicationUserId" class="form-control" />
                 <button type="submit" class="btn btn-primary">Save</button>
             </EditForm>
         </div>
@@ -65,9 +63,9 @@ else
     [SupplyParameterFromForm]
     private Employee? Employee { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        Employee ??= await context.Employees.FirstOrDefaultAsync(m => m.Id == Id);
+        Employee ??= employeeService.GetEmployee(Id);
 
         if (Employee is null)
         {
@@ -79,11 +77,11 @@ else
     // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
     private async Task UpdateEmployee()
     {
-        context.Attach(Employee!).State = EntityState.Modified;
 
         try
         {
-            await context.SaveChangesAsync();
+            await employeeService.SaveEmployee(Employee!);
+            // await context.SaveChangesAsync();
         }
         catch (DbUpdateConcurrencyException)
         {
@@ -102,6 +100,6 @@ else
 
     private bool EmployeeExists(int id)
     {
-        return context.Employees.Any(e => e.Id == id);
+        return employeeService.GetEmployee(id) != null;
     }
 }

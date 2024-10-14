@@ -1,4 +1,4 @@
-﻿@rendermode InteractiveServer
+﻿ @* @rendermode InteractiveServer *@
 
 @page "/employees"
 @using Microsoft.EntityFrameworkCore
@@ -6,7 +6,8 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using OfficeManagement.Data
-@inject ApplicationDbContext _context
+@using OfficeManagement.Services
+@inject IEmployeeService employeeService
 
 @attribute [Authorize(Roles = "Admin")]
 
@@ -22,30 +23,31 @@
     <input @bind="searchTerm" @oninput="OnSearchChanged" class="form-control" placeholder="Search by name..." />
 </div>
 
+@if (filteredEmployees != null)
+{
+    <QuickGrid Class="table" Items="filteredEmployees.AsQueryable<Employee>()">
+        <PropertyColumn Property="employee => employee.Id" />
+        <PropertyColumn Property="employee => employee.FirstName" Sortable="true" />
+        <PropertyColumn Property="employee => employee.LastName" Sortable="true" />
+        <PropertyColumn Property="employee => employee.Department" />
+        <PropertyColumn Property="employee => employee.HireDate" Sortable="true" />
 
-<QuickGrid Class="table" Items="filteredEmployees.AsQueryable<Employee>()">
-    <PropertyColumn Property="employee => employee.Id" />
-    <PropertyColumn Property="employee => employee.FirstName" Sortable="true" />
-    <PropertyColumn Property="employee => employee.LastName" Sortable="true" />
-    <PropertyColumn Property="employee => employee.Department" />
-    <PropertyColumn Property="employee => employee.HireDate" Sortable="true" />
-    <PropertyColumn Property="employee => employee.ApplicationUserId" />
-
-    <TemplateColumn Context="employee">
-        <a href="@($"employees/edit?id={employee.Id}")">Edit</a> |
-        @* <a href="@($"employees/details?id={employee.Id}")">Details</a> | *@
-        <a href="@($"employees/delete?id={employee.Id}")">Delete</a>
-    </TemplateColumn>
-</QuickGrid>
+        <TemplateColumn Context="employee">
+            <a href="@($"employees/edit?id={employee.Id}")">Edit</a> |
+            @* <a href="@($"employees/details?id={employee.Id}")">Details</a> | *@
+            <a href="@($"employees/delete?id={employee.Id}")">Delete</a>
+        </TemplateColumn>
+    </QuickGrid>
+}
 
 @code {
     private List<Employee> _employees;
     private List<Employee> filteredEmployees;
     private string searchTerm = "";
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        _employees = _context.Employees.ToList();
+        _employees = await employeeService.GetEmployees();
         filteredEmployees = _employees;
     }
 
