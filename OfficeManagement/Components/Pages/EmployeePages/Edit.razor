@@ -72,9 +72,9 @@ else
     [SupplyParameterFromForm]
     private Employee? Employee { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        Employee ??= employeeService.GetEmployee(Id);
+        Employee ??= await employeeService.GetEmployee(Id);
 
         if (Employee is null)
         {
@@ -86,7 +86,6 @@ else
     // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
     private async Task UpdateEmployee()
     {
-
         try
         {
             await employeeService.SaveEmployee(Employee!);
@@ -94,7 +93,7 @@ else
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!EmployeeExists(Employee!.Id))
+            if (!await EmployeeExists(Employee!.Id))
             {
                 NavigationManager.NavigateTo("notfound");
             }
@@ -107,8 +106,8 @@ else
         NavigationManager.NavigateTo("/employees");
     }
 
-    private bool EmployeeExists(int id)
+    private async Task<bool> EmployeeExists(int id)
     {
-        return employeeService.GetEmployee(id) != null;
+        return await employeeService.GetEmployee(id) != null;
     }
 }

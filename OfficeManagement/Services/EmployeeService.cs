@@ -6,7 +6,7 @@ namespace OfficeManagement.Services
     public interface IEmployeeService
     {
         Task<List<Employee>> GetEmployees();
-        Employee GetEmployee(int id);
+        Task<Employee> GetEmployee(int id);
         Task SaveEmployee(Employee employee);
     }
 
@@ -24,9 +24,9 @@ namespace OfficeManagement.Services
             return (List<Employee>) await _repository.GetAll();
         }
 
-        public Employee GetEmployee(int id)
+        public async Task<Employee> GetEmployee(int id)
         {
-            return _repository.Get(id);
+            return await _repository.Get(id);
         }
 
         public async Task SaveEmployee(Employee employee)

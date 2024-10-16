@@ -8,7 +8,7 @@ namespace OfficeManagement.Repositories
     {
         void Add(T entity);
         void AddRange(IEnumerable<T> entities);
-        T Get(int id);
+        Task<T> Get(int id);
         Task<IEnumerable<T>> GetAll();
         IQueryable<T> GetAllQueryable();
         IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
@@ -38,9 +38,9 @@ namespace OfficeManagement.Repositories
             context.Set<T>().AddRange(entities);
         }
 
-        public T Get(int id)
+        public async Task<T> Get(int id)
         {
-            return context.Find<T>(id);
+            return await context.FindAsync<T>(id);
         }
 
         public async Task<IEnumerable<T>> GetAll()
