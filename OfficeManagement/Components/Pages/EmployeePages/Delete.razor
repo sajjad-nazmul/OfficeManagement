@@ -1,12 +1,17 @@
 ﻿@page "/employees/delete"
 @using Microsoft.EntityFrameworkCore
 @using OfficeManagement.Data
-@inject ApplicationDbContext context
-@inject NavigationManager NavigationManager
+@using OfficeManagement.Services
 @using Microsoft.Extensions.Localization
 @using OfficeManagement.Locales;
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Authorization
 
+@inject NavigationManager NavigationManager
 @inject IStringLocalizer<Resource> localizer
+@inject IEmployeeService employeeService
+
+@attribute [Authorize(Policy = "EditEmployeePolicy")]
 
 <PageTitle>@localizer["Delete"]</PageTitle>
 
@@ -52,7 +57,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        employee = await context.Employees.FirstOrDefaultAsync(m => m.Id == Id);
+        employee = await employeeService.GetEmployee(Id);
 
         if (employee is null)
         {
@@ -62,8 +67,7 @@
 
     private async Task DeleteEmployee()
     {
-        context.Employees.Remove(employee!);
-        await context.SaveChangesAsync();
+        await employeeService.DeleteEmployee(employee!);
         NavigationManager.NavigateTo("/employees");
     }
 }

@@ -16,7 +16,7 @@ namespace OfficeManagement.Repositories
         Task Update(T entity);
         Task SaveChangesAsync();
         void UpdateRanage(IEnumerable<T> entities);
-        void Delete(T entity);
+        Task Delete(T entity);
         IQueryable<T> FindQueryableBySql(string query);
     }
 
@@ -83,9 +83,10 @@ namespace OfficeManagement.Repositories
             context.UpdateRange(entities);
         }
 
-        public void Delete(T entity)
+        public async Task Delete(T entity)
         {
             context.Remove(entity);
+            await SaveChangesAsync();
         }
 
         public IQueryable<T> FindQueryableBySql(string query)

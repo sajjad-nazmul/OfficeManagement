@@ -13,10 +13,6 @@ namespace OfficeManagement.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<Employee>()
-                .HasOne(e => e.ApplicationUser)
-                .WithOne()
-                .HasForeignKey<Employee>(e => e.ApplicationUserId);
         }
     }
 }

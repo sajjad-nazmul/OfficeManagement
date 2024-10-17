@@ -34,12 +34,7 @@
                 <label for="hiredate" class="form-label">HireDate:</label> 
                 <InputDate id="hiredate" @bind-Value="Employee.HireDate" class="form-control" /> 
                 <ValidationMessage For="() => Employee.HireDate" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="applicationuserid" class="form-label">ApplicationUserId:</label> 
-                <InputText id="applicationuserid" @bind-Value="Employee.ApplicationUserId" class="form-control" /> 
-                <ValidationMessage For="() => Employee.ApplicationUserId" class="text-danger" /> 
-            </div>        
+            </div>
             <button type="submit" class="btn btn-primary">Create</button>
         </EditForm>
     </div>

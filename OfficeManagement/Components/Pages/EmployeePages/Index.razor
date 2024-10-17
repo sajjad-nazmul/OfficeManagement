@@ -1,4 +1,4 @@
-﻿ @* @rendermode InteractiveServer *@
+﻿@rendermode InteractiveServer
 
 @page "/employees"
 @using Microsoft.EntityFrameworkCore
@@ -22,9 +22,9 @@
 
 <h1>@localizer["Employees"]</h1>
 
-@* <p>
+<p>
     <a href="employees/create">Create New</a>
-</p> *@
+</p>
 
 <div class="mb-3">
     <input @bind="searchTerm" @oninput="OnSearchChanged" class="form-control" placeholder="@localizer["Search by name..."]" />

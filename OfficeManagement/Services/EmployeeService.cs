@@ -8,6 +8,7 @@ namespace OfficeManagement.Services
         Task<List<Employee>> GetEmployees();
         Task<Employee> GetEmployee(int id);
         Task SaveEmployee(Employee employee);
+        Task DeleteEmployee(Employee employee);
     }
 
     public class EmployeeService : IEmployeeService
@@ -32,6 +33,11 @@ namespace OfficeManagement.Services
         public async Task SaveEmployee(Employee employee)
         {
             await _repository.Update(employee);
+        }
+
+        public async Task DeleteEmployee(Employee employee)
+        {
+            await _repository.Delete(employee);
         }
 
     }

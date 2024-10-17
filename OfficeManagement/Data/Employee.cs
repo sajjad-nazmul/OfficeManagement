@@ -10,11 +10,5 @@ namespace OfficeManagement.Data
         public string? LastName { get; set; }
         public string? Department { get; set; }
         public DateTime HireDate { get; set; }
-
-        // Foreign key for IdentityUser
-        public string? ApplicationUserId { get; set; }
-
-        // Navigation property for IdentityUser
-        public ApplicationUser? ApplicationUser { get; set; }
     }
 }

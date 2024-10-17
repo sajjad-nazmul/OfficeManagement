@@ -1,6 +1,7 @@
-﻿@page "/employees/edit"
-@using Microsoft.EntityFrameworkCore
+﻿@rendermode InteractiveServer
 
+@page "/employees/edit"
+@using Microsoft.EntityFrameworkCore
 @using OfficeManagement.Data
 @using OfficeManagement.Services
 @using Microsoft.AspNetCore.Identity
@@ -12,8 +13,7 @@
 @inject IEmployeeService employeeService
 @inject NavigationManager NavigationManager
 
-
-@attribute [Authorize(Roles = "Admin")]
+@attribute [Authorize(Policy = "EditEmployeePolicy")]
 
 <PageTitle>@localizer["Edit"]</PageTitle>
 
@@ -53,8 +53,6 @@ else
                     <InputDate id="hiredate" @bind-Value="Employee.HireDate" class="form-control" />
                     <ValidationMessage For="() => Employee.HireDate" class="text-danger" />
                 </div>
-
-                <InputText id="applicationUserId" @bind-Value="Employee.ApplicationUserId" class="form-control" hidden/>
                 <button type="submit" class="btn btn-primary">@localizer["Save"]</button>
             </EditForm>
         </div>
