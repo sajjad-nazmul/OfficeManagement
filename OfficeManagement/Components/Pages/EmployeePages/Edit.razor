@@ -1,6 +1,4 @@
-﻿@rendermode InteractiveServer
-
-@page "/employees/edit"
+﻿@page "/employees/edit"
 @using Microsoft.EntityFrameworkCore
 @using OfficeManagement.Data
 @using OfficeManagement.Services
@@ -29,7 +27,7 @@ else
 {
     <div class="row">
         <div class="col-md-4">
-            <EditForm method="post" Model="Employee" OnValidSubmit="UpdateEmployee" FormName="edit" Enhance>
+            <EditForm method="post" Model="Employee" OnValidSubmit="UpdateEmployee" FormName="edit">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
                 <input type="hidden" name="Employee.Id" value="@Employee.Id" />
