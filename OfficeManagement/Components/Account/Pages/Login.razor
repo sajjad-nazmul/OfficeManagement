@@ -6,9 +6,12 @@
 @using OfficeManagement.Data
 @using Microsoft.Extensions.Localization
 @using OfficeManagement.Locales;
+@using System.Security.Claims
 
 @inject IStringLocalizer<Resource> localizer
 @inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject RoleManager<ApplicationUserRole> RoleManager
 @inject ILogger<Login> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
@@ -88,6 +91,29 @@
         }
     }
 
+    public async Task AssignRoleClaim(ApplicationUser user)
+    {
+        var roles = await UserManager.GetRolesAsync(user);
+        var roleEntities = new List<ApplicationUserRole>();
+        foreach (var roleName in roles)
+        {
+            var role = await RoleManager.FindByNameAsync(roleName);
+            if (role != null)
+            {
+                roleEntities.Add(role);
+            }
+        }
+        // Get the highest preference role
+        var highestPreferenceRole = roleEntities
+            .OrderByDescending(role => role.Preference)
+            .FirstOrDefault();
+        if (highestPreferenceRole != null)
+        {
+            var roleClaim = new Claim("HighestRole", highestPreferenceRole.Name ?? "User");
+            await UserManager.AddClaimAsync(user, roleClaim);
+        }
+    }
+
     public async Task LoginUser()
     {
         // This doesn't count login failures towards account lockout
@@ -95,6 +121,11 @@
         var result = await SignInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
         if (result.Succeeded)
         {
+            var user = await UserManager.FindByEmailAsync(Input.Email);
+            if (user != null)
+            {
+                await AssignRoleClaim(user);
+            }
             Logger.LogInformation("User logged in.");
             RedirectManager.RedirectTo(ReturnUrl);
         }

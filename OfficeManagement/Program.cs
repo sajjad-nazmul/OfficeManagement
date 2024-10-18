@@ -21,15 +21,11 @@ builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 
-builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultScheme = IdentityConstants.ApplicationScheme;
-        options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-    })
-    .AddIdentityCookies();
-
 builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("EditEmployeePolicy", policy => policy.RequireClaim("Edit Employee"));
+    .AddPolicy("EditEmployeePolicy", policy => policy.RequireClaim("Edit Employee"))
+    .AddPolicy("AdminDashboardOnly", policy => policy.RequireClaim("HighestRole", "Admin"))
+    .AddPolicy("ModeratorDashboardOnly", policy => policy.RequireClaim("HighestRole", "Moderator"))
+    .AddPolicy("UserDashboardOnly", policy => policy.RequireClaim("HighestRole", "User"));
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -38,8 +34,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddQuickGridEntityFrameworkAdapter();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddRoles<IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, ApplicationUserRole>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<ApplicationUserRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();

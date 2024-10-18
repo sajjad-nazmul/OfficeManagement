@@ -1,0 +1,13 @@
+﻿@page "/Dashboard/UserDashboard"
+
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize(Policy = "UserDashboardOnly")]
+
+<PageTitle>User Dashboard</PageTitle>
+
+<h3>UserDashboard</h3>
+
+@code {
+
+}

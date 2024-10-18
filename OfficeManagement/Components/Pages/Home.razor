@@ -1,10 +1,39 @@
 ﻿@page "/"
 @using Microsoft.Extensions.Localization
+@using OfficeManagement.Data
 @using OfficeManagement.Locales
+@using OfficeManagement.Helpers
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
 
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IStringLocalizer<Resource> localizer
+@inject UserManager<ApplicationUser> UserManager
+@inject NavigationManager NavigationManager
+
+@attribute [Authorize]
 
 <PageTitle>@localizer["Office Management"]</PageTitle>
 
 <h1>@localizer["Office Management"]</h1>
 
+@code {
+    private ClaimsPrincipal? currentUser;
+    private IEnumerable<string> roleClaims = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        currentUser = authState.User;
+        var user = await UserManager.GetUserAsync(currentUser);
+        var claims = await UserManager.GetClaimsAsync(user!);
+        var roleClaim = claims.FirstOrDefault(c => c.Type == "HighestRole");
+        if (Constants.RoleDashboardMap.TryGetValue(roleClaim!.Value, out var dashboardLink))
+        {
+            NavigationManager.NavigateTo(dashboardLink);
+        }
+    }
+}
