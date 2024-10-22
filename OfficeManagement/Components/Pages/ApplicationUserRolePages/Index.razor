@@ -1,0 +1,39 @@
+﻿@page "/roles"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using OfficeManagement.Data
+@using OfficeManagement.Services
+
+@inject IRoleService roleService
+
+@attribute [Authorize(Roles = "Super User")]
+
+<PageTitle>Roles</PageTitle>
+
+<h1>Roles</h1>
+
+<p>
+    <a href="roles/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="roles?.AsQueryable<ApplicationUserRole>()">
+    <PropertyColumn Property="roles => roles.Preference" />
+    <PropertyColumn Property="roles => roles.Name" />
+
+    <TemplateColumn Context="role">
+        <a href="@($"roles/edit?id={role.Id}")">Edit</a> |
+        <a href="@($"roles/details?id={role.Id}")">Details</a> |
+        <a href="@($"roles/delete?id={role.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    private List<ApplicationUserRole>? roles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        roles = await roleService.GetRoles();
+    }
+}

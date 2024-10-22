@@ -28,8 +28,7 @@
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         currentUser = authState.User;
-        var user = await UserManager.GetUserAsync(currentUser);
-        var claims = await UserManager.GetClaimsAsync(user!);
+        var claims = currentUser.Claims.ToList();
         var roleClaim = claims.FirstOrDefault(c => c.Type == "HighestRole");
         if (Constants.RoleDashboardMap.TryGetValue(roleClaim!.Value, out var dashboardLink))
         {

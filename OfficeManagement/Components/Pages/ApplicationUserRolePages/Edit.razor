@@ -1,0 +1,101 @@
+﻿@page "/roles/edit"
+@using Microsoft.EntityFrameworkCore
+@using OfficeManagement.Data
+@using OfficeManagement.Services
+
+@inject IRoleService roleService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>ApplicationUserRole</h2>
+<hr />
+@if (ApplicationUserRole is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="ApplicationUserRole" OnValidSubmit="UpdateApplicationUserRole" FormName="edit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <input type="hidden" name="ApplicationUserRole.Id" value="@ApplicationUserRole.Id" />
+                <div class="mb-3">
+                    <label for="preference" class="form-label">Preference:</label>
+                    <InputNumber id="preference" @bind-Value="ApplicationUserRole.Preference" class="form-control" />
+                    <ValidationMessage For="() => ApplicationUserRole.Preference" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name:</label>
+                    <InputText id="name" @bind-Value="ApplicationUserRole.Name" class="form-control" />
+                    <ValidationMessage For="() => ApplicationUserRole.Name" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="normalizedname" class="form-label">NormalizedName:</label>
+                    <InputText id="normalizedname" @bind-Value="ApplicationUserRole.NormalizedName" class="form-control" />
+                    <ValidationMessage For="() => ApplicationUserRole.NormalizedName" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="concurrencystamp" class="form-label">ConcurrencyStamp:</label>
+                    <InputText id="concurrencystamp" @bind-Value="ApplicationUserRole.ConcurrencyStamp" class="form-control" />
+                    <ValidationMessage For="() => ApplicationUserRole.ConcurrencyStamp" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/applicationuserroles">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private string Id { get; set; }
+
+    [SupplyParameterFromForm]
+    private ApplicationUserRole? ApplicationUserRole { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ApplicationUserRole ??= await roleService.GetRole(Id);
+
+        if (ApplicationUserRole is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdateApplicationUserRole()
+    {
+        try
+        {
+            await roleService.SaveRole(ApplicationUserRole!);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!await ApplicationUserRoleExists(ApplicationUserRole!.Id))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/roles");
+    }
+
+    private async Task<bool> ApplicationUserRoleExists(string id)
+    {
+        return await roleService.GetRole(id) != null;
+    }
+}

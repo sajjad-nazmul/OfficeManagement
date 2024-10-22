@@ -25,7 +25,8 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy("EditEmployeePolicy", policy => policy.RequireClaim("Edit Employee"))
     .AddPolicy("AdminDashboardOnly", policy => policy.RequireClaim("HighestRole", "Admin"))
     .AddPolicy("ModeratorDashboardOnly", policy => policy.RequireClaim("HighestRole", "Moderator"))
-    .AddPolicy("UserDashboardOnly", policy => policy.RequireClaim("HighestRole", "User"));
+    .AddPolicy("UserDashboardOnly", policy => policy.RequireClaim("HighestRole", "User"))
+    .AddPolicy("SuperUserDashboardOnly", policy => policy.RequireClaim("HighestRole", "Super User"));
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -44,6 +45,10 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+
+builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, CustomClaimsPrincipalFactory>();
 
 var app = builder.Build();
 

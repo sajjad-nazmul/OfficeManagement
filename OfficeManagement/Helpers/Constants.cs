@@ -6,7 +6,8 @@
             {
                 { "Admin", "/Dashboard/AdminDashboard" },
                 { "Moderator", "/Dashboard/ModeratorDashboard" },
-                { "User", "/Dashboard/UserDashboard" }
+                { "User", "/Dashboard/UserDashboard" },
+                { "Super User", "/Dashboard/SuperUserDashboard" }
             };
     }
 }

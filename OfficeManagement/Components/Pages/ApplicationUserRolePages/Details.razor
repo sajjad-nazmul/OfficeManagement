@@ -1,0 +1,53 @@
+﻿@page "/roles/details"
+@using Microsoft.EntityFrameworkCore
+@using OfficeManagement.Data
+@using OfficeManagement.Services
+
+@inject IRoleService roleService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>ApplicationUserRole</h2>
+    <hr />
+    @if (applicationuserrole is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Preference</dt>
+            <dd class="col-sm-10">@applicationuserrole.Preference</dd>
+            <dt class="col-sm-2">Name</dt>
+            <dd class="col-sm-10">@applicationuserrole.Name</dd>
+            <dt class="col-sm-2">NormalizedName</dt>
+            <dd class="col-sm-10">@applicationuserrole.NormalizedName</dd>
+            <dt class="col-sm-2">ConcurrencyStamp</dt>
+            <dd class="col-sm-10">@applicationuserrole.ConcurrencyStamp</dd>
+        </dl>
+        <div>
+            <a href="@($"/roles/edit?id={applicationuserrole.Id}")">Edit</a> |
+            <a href="@($"/roles")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private ApplicationUserRole? applicationuserrole;
+
+    [SupplyParameterFromQuery]
+    private string Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        applicationuserrole = await roleService.GetRole(Id);
+
+        if (applicationuserrole is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

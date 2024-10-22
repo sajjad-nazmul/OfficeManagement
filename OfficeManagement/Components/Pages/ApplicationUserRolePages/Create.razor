@@ -1,0 +1,59 @@
+﻿@page "/roles/create"
+@using Microsoft.EntityFrameworkCore
+@using OfficeManagement.Data
+@using OfficeManagement.Services
+
+@inject IRoleService roleService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>ApplicationUserRole</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="ApplicationUserRole" OnValidSubmit="AddApplicationUserRole" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+            <div class="mb-3">
+                <label for="preference" class="form-label">Preference:</label> 
+                <InputNumber id="preference" @bind-Value="ApplicationUserRole.Preference" class="form-control" /> 
+                <ValidationMessage For="() => ApplicationUserRole.Preference" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="name" class="form-label">Name:</label> 
+                <InputText id="name" @bind-Value="ApplicationUserRole.Name" class="form-control" /> 
+                <ValidationMessage For="() => ApplicationUserRole.Name" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="normalizedname" class="form-label">NormalizedName:</label> 
+                <InputText id="normalizedname" @bind-Value="ApplicationUserRole.NormalizedName" class="form-control" /> 
+                <ValidationMessage For="() => ApplicationUserRole.NormalizedName" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="concurrencystamp" class="form-label">ConcurrencyStamp:</label> 
+                <InputText id="concurrencystamp" @bind-Value="ApplicationUserRole.ConcurrencyStamp" class="form-control" /> 
+                <ValidationMessage For="() => ApplicationUserRole.ConcurrencyStamp" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/applicationuserroles">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private ApplicationUserRole ApplicationUserRole { get; set; } = new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddApplicationUserRole()
+    {
+        await roleService.SaveRole(ApplicationUserRole);
+        NavigationManager.NavigateTo("/applicationuserroles");
+    }
+}

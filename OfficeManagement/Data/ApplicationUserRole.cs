@@ -6,5 +6,4 @@ namespace OfficeManagement.Data
     {
         public int Preference { get; set; }
     }
-
 }
