@@ -1,0 +1,13 @@
+﻿@page "/Profile/SuperUser"
+
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize(Policy = "SuperUserDashboardOnly")]
+
+<PageTitle>Super User Profile</PageTitle>
+
+<h3>Super User Profile</h3>
+
+@code {
+
+}

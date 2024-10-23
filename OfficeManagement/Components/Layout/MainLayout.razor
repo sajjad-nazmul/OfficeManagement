@@ -1,5 +1,14 @@
 ﻿@inherits LayoutComponentBase
 
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -10,7 +19,7 @@
             <OfficeManagement.Components.Pages.ChooseLanguage />
         </div>
 
-        <article class="content px-4">
+        <article class="content px-4 @SetClass()">
             @Body
         </article>
     </main>
@@ -21,3 +30,47 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+@code {
+    private ClaimsPrincipal? currentUser;
+    private string? highestRole;
+    private string? firstPartOfUri;
+
+    protected override async Task OnInitializedAsync()
+    {
+        highestRole = await GetHighestRole();
+        firstPartOfUri = GetFirstPartOfUri();
+    }
+
+    private string SetClass()
+    {
+        return (highestRole, firstPartOfUri) switch
+        {
+            ("Admin", "/profile") => "css-1",
+            ("Admin", "/dashboard") => "css-2",
+            ("Moderator", "/profile") => "css-3",
+            ("Moderator", "/dashboard") => "css-4",
+            ("User", "/profile") => "css-5",
+            ("User", "/dashboard") => "css-6",
+            ("Super User", "/profile") => "css-7",
+            ("Super User", "/dashboard") => "css-8",
+            _ => ""  // Default case
+        };
+    }
+
+    private async Task<String> GetHighestRole()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        currentUser = authState.User;
+        var claims = currentUser.Claims.ToList();
+        var roleClaim = claims.FirstOrDefault(c => c.Type == "HighestRole");
+        return roleClaim?.Value ?? "User";
+    }
+
+    private string GetFirstPartOfUri()
+    {
+        var currentUri = NavigationManager.ToBaseRelativePath(NavigationManager.Uri).ToLower();
+        var parts = currentUri.Split('/');
+        return parts.Length > 0 ? $"/{parts[0]}" : "/";
+    }
+}

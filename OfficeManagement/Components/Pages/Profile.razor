@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿@page "/Profile"
 @using Microsoft.Extensions.Localization
 @using OfficeManagement.Data
 @using OfficeManagement.Locales
@@ -11,6 +11,7 @@
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IStringLocalizer<Resource> localizer
+@inject UserManager<ApplicationUser> UserManager
 @inject NavigationManager NavigationManager
 
 @attribute [Authorize]
@@ -21,7 +22,6 @@
 
 @code {
     private ClaimsPrincipal? currentUser;
-    private IEnumerable<string> roleClaims = new List<string>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -29,9 +29,9 @@
         currentUser = authState.User;
         var claims = currentUser.Claims.ToList();
         var roleClaim = claims.FirstOrDefault(c => c.Type == "HighestRole");
-        if (Constants.RoleDashboardMap.TryGetValue(roleClaim!.Value, out var dashboardLink))
+        if (Constants.RoleProfileMap.TryGetValue(roleClaim!.Value, out var profileLink))
         {
-            NavigationManager.NavigateTo(dashboardLink);
+            NavigationManager.NavigateTo(profileLink);
         }
     }
 }

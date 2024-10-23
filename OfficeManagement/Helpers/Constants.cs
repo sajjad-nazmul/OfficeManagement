@@ -9,5 +9,13 @@
                 { "User", "/Dashboard/UserDashboard" },
                 { "Super User", "/Dashboard/SuperUserDashboard" }
             };
+
+        public static readonly Dictionary<string, string> RoleProfileMap = new Dictionary<string, string>
+            {
+                { "Admin", "/Profile/Admin" },
+                { "Moderator", "/Profile/Moderator" },
+                { "User", "/Profile/User" },
+                { "Super User", "/Profile/SuperUser" }
+            };
     }
 }

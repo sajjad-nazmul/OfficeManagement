@@ -1,0 +1,13 @@
+﻿@page "/Profile/Moderator"
+
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize(Policy = "ModeratorDashboardOnly")]
+
+<PageTitle>Moderator Profile</PageTitle>
+
+<h3>Moderator Profile</h3>
+
+@code {
+
+}
