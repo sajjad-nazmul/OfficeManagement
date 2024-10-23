@@ -18,6 +18,8 @@
 
 @attribute [Authorize(Roles = "Admin, Moderator")]
 
+@attribute [StreamRendering]
+
 <PageTitle>@localizer["Employees"]</PageTitle>
 
 <h1>@localizer["Employees"]</h1>
@@ -46,6 +48,14 @@
         </TemplateColumn>
     </QuickGrid>
 }
+else
+{
+    <div class="d-flex justify-content-center align-items-center" style="height: 70vh;">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+}
 
 @code {
     private List<Employee>? _employees;
@@ -54,6 +64,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await Task.Delay(2000);
         _employees = await employeeService.GetEmployees();
         filteredEmployees = _employees;
     }

@@ -1,0 +1,22 @@
+﻿@using OfficeManagement.Components.ViewModels
+
+<ol class="breadcrumb" style="margin: 0;">
+    @foreach (var item in Items)
+    {
+        if (item.IsActive)
+        {
+            <li class="breadcrumb-item active">@item.Text</li>
+        }
+        else
+        {
+            <li class="breadcrumb-item">
+                <a href="@item.Link">@item.Text</a>
+            </li>
+        }
+    }
+</ol>
+
+@code {
+    [Parameter]
+    public List<BreadcrumbItem> Items { get; set; }
+}

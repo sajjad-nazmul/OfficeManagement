@@ -5,17 +5,21 @@
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
+@using OfficeManagement.Components.Layout
+@using OfficeManagement.Components.ViewModels
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 
 <div class="page">
     <div class="sidebar">
-        <NavMenu />
+        <NavMenu NavTitle="@navTitle" />
     </div>
 
     <main>
+
         <div class="top-row px-4">
+            <Breadcrumb Items="breadcrumbItems" />
             <OfficeManagement.Components.Pages.ChooseLanguage />
         </div>
 
@@ -35,11 +39,44 @@
     private ClaimsPrincipal? currentUser;
     private string? highestRole;
     private string? firstPartOfUri;
+    private List<BreadcrumbItem>? breadcrumbItems;
+    private string? navTitle { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         highestRole = await GetHighestRole();
         firstPartOfUri = GetFirstPartOfUri();
+
+        var allPartsOfUri = GetAllPartsOfUri();
+
+        breadcrumbItems = new List<BreadcrumbItem>()
+        {
+            new BreadcrumbItem("Home", "/")
+        };
+        var runningUri = "";
+        foreach (var part in allPartsOfUri)
+        {
+            if (part.Length > 0)
+            {
+                runningUri += "/" + part;
+                breadcrumbItems.Add(
+                    new BreadcrumbItem(part, runningUri)
+                );
+            }
+        }
+        breadcrumbItems.Last().IsActive = true;
+
+        if (firstPartOfUri == "/dashboard")
+        {
+            navTitle = allPartsOfUri.Last() switch
+            {
+                "AdminDashboard" => "Admin Dashboard",
+                "ModeratorDashboard" => "Moderator Dashboard",
+                "UserDashboard" => "User Dashboard",
+                "SuperUserDashboard" => "Super User Dashboard",
+                _ => "Office Management"  // Default case
+            };
+        }
     }
 
     private string SetClass()
@@ -66,11 +103,19 @@
         var roleClaim = claims.FirstOrDefault(c => c.Type == "HighestRole");
         return roleClaim?.Value ?? "User";
     }
-
+    
     private string GetFirstPartOfUri()
     {
         var currentUri = NavigationManager.ToBaseRelativePath(NavigationManager.Uri).ToLower();
         var parts = currentUri.Split('/');
         return parts.Length > 0 ? $"/{parts[0]}" : "/";
+    }
+
+    private List<string> GetAllPartsOfUri()
+    {
+        var currentUri = new Uri(NavigationManager.Uri);
+        var uriWithoutQuery = $"{currentUri.AbsolutePath}";
+
+        return uriWithoutQuery.Split('/').ToList();
     }
 }
