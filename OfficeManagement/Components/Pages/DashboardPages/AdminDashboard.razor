@@ -9,21 +9,4 @@
 
 <PageTitle>Admin Dashboard</PageTitle>
 
-<Breadcrumb Items="@breadcrumbItems" />
-
 <h3>AdminDashboard</h3>
-
-@code {
-    private List<BreadcrumbItem>? breadcrumbItems;
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        breadcrumbItems = new List<BreadcrumbItem>
-        {
-            new BreadcrumbItem("Home", "/"),
-            new BreadcrumbItem("Dashboard", "/Dashboard"),
-            new BreadcrumbItem("Admin", "", true)
-        };
-    }
-}

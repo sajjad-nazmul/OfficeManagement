@@ -1,5 +1,6 @@
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using OfficeManagement.Data;
 
 namespace OfficeManagement.Data
 {
@@ -11,5 +12,6 @@ namespace OfficeManagement.Data
         {
             base.OnModelCreating(builder);
         }
+        public DbSet<OfficeManagement.Data.TouristPlace> TouristPlace { get; set; } = default!;
     }
 }

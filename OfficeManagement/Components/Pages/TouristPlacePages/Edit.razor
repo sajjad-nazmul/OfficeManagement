@@ -1,0 +1,160 @@
+﻿@page "/touristplaces/edit"
+
+@rendermode InteractiveServer
+
+@using Microsoft.EntityFrameworkCore
+@using OfficeManagement.Data
+@using OfficeManagement.Services
+
+@inject IHttpClientFactory ClientFactory
+
+
+@inject ITouristPlaceService touristPlaceService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>TouristPlace</h2>
+<hr />
+@if (TouristPlace is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="TouristPlace" OnValidSubmit="UpdateTouristPlace" FormName="edit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <input type="hidden" name="TouristPlace.Id" value="@TouristPlace.Id" />
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name:</label>
+                    <InputText id="name" @bind-Value="TouristPlace.Name" class="form-control" />
+                    <ValidationMessage For="() => TouristPlace.Name" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address:</label>
+                    <InputText id="address" @bind-Value="TouristPlace.Address" class="form-control" />
+                    <ValidationMessage For="() => TouristPlace.Address" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="rating" class="form-label">Rating:</label>
+                    <InputNumber id="rating" @bind-Value="TouristPlace.Rating" class="form-control" />
+                    <ValidationMessage For="() => TouristPlace.Rating" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="imageurl" class="form-label">Image:</label>
+                    <InputText hidden id="imageurl" @bind-Value="TouristPlace.ImageUrl" class="form-control" />
+                    <InputFile id="imageupload" OnChange="HandleImageUpload" />
+                    <div>
+                        Current Picture:
+                        @if (!string.IsNullOrEmpty(TouristPlace.ImageUrl))
+                        {
+                            <img height="90" src="@(TouristPlace.ImageUrl)" />
+                        }
+                        else
+                        {
+                            <span>No image</span>
+                        }
+                    </div>
+
+                    <ValidationMessage For="() => TouristPlace.ImageUrl" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/touristplaces">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    private TouristPlace? TouristPlace { get; set; }
+
+
+    private async Task HandleImageUpload(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file == null) return;
+
+
+        // var stream = new LazyBrowserFileStream(file);
+        // var fileContent = new StreamContent(stream);
+
+        // fileContent.Headers.ContentType =
+        //     new MediaTypeHeaderValue(file.ContentType);
+
+        // content.Add(
+        //     content: fileContent,
+        //     name: "file",
+        //     fileName: file.Name);
+
+        // Prepare the file content for upload
+        using var content = new MultipartFormDataContent();
+        var fileContent = new StreamContent(file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024)); // Max file size 10 MB
+        content.Add(fileContent, "file", file.Name);
+
+
+        var client = ClientFactory.CreateClient();
+
+        // Send the file to the API
+        var response = await client.PostAsync("https://localhost:7018/api/FileUpload", content);
+        if (response.IsSuccessStatusCode)
+        {
+            var result = await response.Content.ReadFromJsonAsync<FileUploadResponse>();
+            TouristPlace!.ImageUrl = result?.FileUrl; // Set the ImageUrl from the API response
+        }
+    }
+
+    public class FileUploadResponse
+    {
+        public string FileUrl { get; set; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        TouristPlace ??= await touristPlaceService.GetTouristPlace(Id);
+
+        if (TouristPlace is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdateTouristPlace()
+    {
+        try
+        {
+            await touristPlaceService.SaveTouristPlace(TouristPlace!);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!await TouristPlaceExists(TouristPlace!.Id))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/touristplaces");
+    }
+
+    private async Task<bool> TouristPlaceExists(int id)
+    {
+        return await touristPlaceService.GetTouristPlace(id) != null;
+    }
+}

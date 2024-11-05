@@ -1,0 +1,79 @@
+﻿@page "/touristplaces"
+
+@rendermode InteractiveServer
+
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using OfficeManagement.Data
+@using OfficeManagement.Services
+
+@inject ITouristPlaceService touristPlaceService
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<AuthorizeView Roles="Admin, Moderator">
+    <p>
+        <a href="touristplaces/create">Create New</a>
+    </p>
+</AuthorizeView>
+
+
+<div class="mb-3">
+    <input @bind="searchTerm" @oninput="OnSearchChanged" class="form-control" placeholder="Search by name or address..." />
+</div>
+
+<QuickGrid Class="table" Items="filteredTouristPlaces?.AsQueryable<TouristPlace>()">
+    <PropertyColumn Property="touristplace => touristplace.Name" Sortable="true" />
+    <PropertyColumn Property="touristplace => touristplace.Address" Sortable="true" />
+    <PropertyColumn Property="touristplace => touristplace.Rating" />
+    @* <PropertyColumn Property="touristplace => touristplace.ImageUrl" /> *@
+
+    <TemplateColumn Title="Image" Context="touristplace">
+        @if (!string.IsNullOrEmpty(touristplace.ImageUrl))
+        {
+            <img height="90" src="@(touristplace.ImageUrl)" />
+        }
+        else
+        {
+            <p>No image</p>
+        }
+    </TemplateColumn>
+    <TemplateColumn Context="touristplace">
+        <AuthorizeView Roles="Admin, Moderator">
+            <a href="@($"touristplaces/edit?id={touristplace.Id}")">Edit</a> |
+        </AuthorizeView>
+        <a href="@($"touristplaces/details?id={touristplace.Id}")">Details</a>
+        <AuthorizeView Roles="Admin">
+            <a href="@($"touristplaces/delete?id={touristplace.Id}")">| Delete</a>
+        </AuthorizeView>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    private string searchTerm = "";
+    private List<TouristPlace>? touristPlaces { get; set; }
+    private List<TouristPlace>? filteredTouristPlaces;
+
+    protected override async Task OnInitializedAsync()
+    {
+        touristPlaces = await touristPlaceService.GetTouristPlaces();
+        filteredTouristPlaces = touristPlaces;
+    }
+
+    private void OnSearchChanged(ChangeEventArgs e)
+    {
+        searchTerm = e.Value.ToString();
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            filteredTouristPlaces = touristPlaces;
+        }
+        else
+        {
+            filteredTouristPlaces = touristPlaces?.Where(e =>
+                e.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                e.Address.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+    }
+}
