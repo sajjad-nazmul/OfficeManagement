@@ -8,6 +8,8 @@
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
+@using System.Security.Cryptography
+@using System.Text
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IStringLocalizer<Resource> localizer
@@ -25,6 +27,30 @@
 
     protected override async Task OnInitializedAsync()
     {
+        // byte[] data = new byte[1000000];
+        // string result = string.Empty;
+
+        // using (SHA256 sha256 = SHA256.Create())
+        // {
+        //     result = sha512.ComputeHash("hellowrold");
+        //     var hash = sha256.ComputeHash(Encoding.Unicode.GetBytes("hellowrold"));
+        //     for (int i = 0; i < hash.Length; i++)
+        //     {
+        //         result += hash[i].ToString("x2");
+        //     }
+        // }
+
+        var result = string.Empty;
+		using (var sha256 = System.Security.Cryptography.SHA512.Create())
+		{
+		    var hash = sha256.ComputeHash(Encoding.Unicode.GetBytes("helloworld"));
+		    for (int i = 0; i < hash.Length; i++)
+		    {
+                result += hash[i].ToString("x2");
+            }
+        }
+
+
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         currentUser = authState.User;
         var claims = currentUser.Claims.ToList();
